@@ -1,13 +1,21 @@
 import { loginUser } from "../services/auth.service.js";
 import { createUser } from "../services/user.service.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../Handlers/responseHandlers.js";
+import { userValidation } from "../validations/user.validation.js";
 
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
+
+    const {error} = userValidation.validate({email, password});
     
+    if (error){
+      const mensaje= error.details[0].message;
+      return res.status(400).json({message: mensaje});
+    }
+
     if (!email || !password) {
-      return handleErrorClient(res, 400, "Email y contraseña son requeridos");
+      return handleErrorClient(res, 400, "Email y contraseña requeridos");
     }
     
     const data = await loginUser(email, password);
@@ -21,8 +29,15 @@ export async function register(req, res) {
   try {
     const data = req.body;
     
-    if (!data.email || !data.password) {
-      return handleErrorClient(res, 400, "Email y contraseña son requeridos");
+    const {error} = userValidation.validate(data);
+
+    if (error) {
+      const mensaje = error.details[0].message;
+      return res.status(400).json({ message: mensaje });
+    }
+
+    if(!data.email || !data.password) {
+      return handleErrorClient(res, 400, "Email y contraseña requeridos");
     }
     
     const newUser = await createUser(data);

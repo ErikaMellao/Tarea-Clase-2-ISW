@@ -59,7 +59,7 @@ export async function deletePrivateProfile(req, res){
 
     await userRepository.remove(user);
 
-    handleSuccess(res, 200, "Perfil eliminado exitosamente", {message: "Tu perfil ha sido eliminado correctamente"});
+    handleSuccess(res, 200, "Perfil eliminado exitosamente", {message: `Tu perfil ${user.email} ha sido eliminado.`});
 
   }catch(error){
     handleErrorServer(res, 500, "Error al eliminar perfil", error);
