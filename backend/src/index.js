@@ -3,15 +3,21 @@ import express from "express";
 import morgan from "morgan";
 import { AppDataSource, connectDB } from "./config/configDb.js";
 import { routerApi } from "./routes/index.routes.js";
+import cors from "cors";
 
 const app = express();
+app.use(
+    cors({
+      credentials: true,
+      origin: true,
+    })
+);
 app.use(express.json());
 app.use(morgan("dev"));
 // Ruta principal de bienvenida
 app.get("/", (req, res) => {
   res.send("¡Bienvenido a mi API REST con TypeORM!");
 });
-
 // Inicializa la conexión a la base de datos
 connectDB()
   .then(() => {

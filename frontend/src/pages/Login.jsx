@@ -1,15 +1,28 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../services/auth.service.js';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ email, password });
-    };    return (
+        setError('');
+        try {
+            const response = await login({ email, password });
+            if (response && response.data && response.data.token) {
+                localStorage.setItem('token', response.data.token);
+                navigate('/home');
+            } else {
+                setError(response.message || 'Credenciales incorrectas');
+            }
+        } catch (error) {
+            setError('Error al conectar con el servidor.');
+        }
+    };  return (
         <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 w-full max-w-md transform transition-all hover:scale-105">
                 <form className="space-y-6" onSubmit={handleSubmit}>

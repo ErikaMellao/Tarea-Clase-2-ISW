@@ -16,7 +16,7 @@ const useLogin = () => {
 
     const handleInputChange = () => {
         setErrorEmail('');
-        setErrorPassword('');
+        setErrorPassword(''); 
     };
 
     return {
