@@ -1,10 +1,23 @@
 import { useState } from 'react';
+import { getProfile } from '../services/profile.service.js';
 
 const Home = () => {
   const [profileData, setProfileData] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleGetProfile = async () => {
-    console.log('Obtener perfil');
+    setError('');
+    try {
+      const data = await getProfile();
+      const user = data.userData || (data.data && data.data.userData)|| data;
+      if (user && user.email) {
+        setProfileData(user);
+      } else {
+        setError('No se pudo obtener el perfil');
+      }
+    } catch (error) {
+      setError('Error al conectar con el servidor.');
+    }
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 flex items-center justify-center p-4">
@@ -22,8 +35,13 @@ const Home = () => {
 
         {profileData && (
           <div className="mt-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <pre className="text-sm text-gray-700 overflow-auto">{JSON.stringify(profileData, null, 2)}</pre>
+            <h2 className="text-xl font-bold mb-4">Perfil</h2>
+            <p><strong>Email:</strong> {profileData.email}</p>
+            <p><strong>Password (encriptada):</strong> {profileData.password}</p>
           </div>
+        )}
+        {error && (
+          <div className="mt-4 text-red-500 font-semibold text-center">{error}</div>
         )}
       </div>
     </div>

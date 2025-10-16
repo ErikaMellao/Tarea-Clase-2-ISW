@@ -17,7 +17,7 @@ const Login = () => {
                 localStorage.setItem('token', response.data.token);
                 navigate('/home');
             } else {
-                setError(response.message || 'Credenciales incorrectas');
+                setError('Credenciales incorrectas');
             }
         } catch (error) {
             setError('Error al conectar con el servidor.');

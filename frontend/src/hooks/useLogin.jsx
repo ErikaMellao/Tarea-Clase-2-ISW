@@ -26,5 +26,4 @@ const useLogin = () => {
         handleInputChange
     };
 };
-
 export default useLogin;

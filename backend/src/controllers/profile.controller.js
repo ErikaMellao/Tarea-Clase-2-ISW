@@ -9,8 +9,11 @@ export function getPublicProfile(req, res) {
   });
 }
 
-export function getPrivateProfile(req, res) {
-  const user = req.user;
+export async function getPrivateProfile(req, res) {
+  const userRepository = AppDataSource.getRepository(User);
+  const userId = req.user.sub;
+  const user = await userRepository.findOne({ where: { id: userId } });
+  if (!user) return handleErrorClient(res, 404, "Usuario no encontrado");
 
   handleSuccess(res, 200, "Perfil privado obtenido exitosamente", {
     message: `¡Hola, ${user.email}! Este es tu perfil privado. Solo tú puedes verlo.`,
