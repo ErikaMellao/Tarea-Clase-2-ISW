@@ -51,7 +51,7 @@ const Home = () => {
           setError('No se pudo actualizar el perfil');
         }
       } catch (error) {
-        setError('Error al conectar con el servidor.');
+        setError('Error al conectar con el servidor');
       }
     }
   };
