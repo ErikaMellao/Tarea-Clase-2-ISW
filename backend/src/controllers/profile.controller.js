@@ -55,7 +55,7 @@ export async function deletePrivateProfile(req, res){
   try{
     const userRepository = AppDataSource.getRepository(User);
 
-    const userId = req.user.sub;
+    const userId = req.user.sub; 
     const user = await userRepository.findOne ({where: {id: userId}});
     
     if(!user) return handleErrorClient(res, 404, "Perfil no encontrado");
