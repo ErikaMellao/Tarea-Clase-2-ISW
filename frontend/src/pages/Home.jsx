@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 import { getProfile, updatePrivateProfile, deletePrivateProfile } from '../services/profile.service.js';
 
 const Home = () => {
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const handleGetProfile = async () => { 
     setError(''); 
     try { 
@@ -42,6 +43,7 @@ const Home = () => {
     });
     if (formValues) {
       try {
+
         const data = await updatePrivateProfile(formValues);
         const user = data || data.data; 
         if (user) {
@@ -70,6 +72,7 @@ const Home = () => {
         if (user) {
           setProfileData(null);
           Swal.fire('Eliminado', user.message, 'success');
+          navigate('/');
         } else {
           setError('No se pudo eliminar el perfil');
         }
