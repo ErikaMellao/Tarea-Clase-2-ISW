@@ -43,7 +43,6 @@ const Home = () => {
     });
     if (formValues) {
       try {
-
         const data = await updatePrivateProfile(formValues);
         const user = data || data.data; 
         if (user) {
